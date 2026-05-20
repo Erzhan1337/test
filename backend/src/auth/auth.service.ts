@@ -59,10 +59,11 @@ export class AuthService {
     }
     const isPasswordValid = await verify(user.password, dto.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException('Invalid credentials');
     }
 
-    return user;
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
   async getNewTokens(refreshToken: string) {

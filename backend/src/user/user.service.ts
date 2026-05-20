@@ -8,31 +8,42 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getById(id: string) {
-    const user = await this.prisma.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
-      include: {
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
         tasks: true,
       },
     });
-    return user;
   }
 
   async getByEmail(email: string) {
-    const user = await this.prisma.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { email },
-      include: {
+      select: {
+        id: true,
+        email: true,
+        password: true,
+        createdAt: true,
+        updatedAt: true,
         tasks: true,
       },
     });
-    return user;
   }
 
   async createUser(dto: AuthDto) {
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: {
         email: dto.email,
         password: await hash(dto.password),
       },
     });
+
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 }
+
