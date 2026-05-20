@@ -86,8 +86,8 @@ export class AuthService {
       httpOnly: true,
       domain: this.configService.get('SERVER_DOMAIN'),
       expires: expiresIn,
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      sameSite: 'lax',
     });
   }
 
@@ -95,8 +95,8 @@ export class AuthService {
     res.cookie(this.REFRESH_TOKEN_NAME, '', {
       httpOnly: true,
       domain: this.configService.get('SERVER_DOMAIN'),
-      secure: true,
-      sameSite: 'none',
+      secure: false,
+      sameSite: 'lax',
       expires: new Date(0),
     });
   }
