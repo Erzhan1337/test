@@ -10,6 +10,7 @@ import { UserService } from 'src/user/user.service';
 import { AuthDto } from './dto/auth.dto';
 import type { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { verify } from 'argon2';
 
 @Injectable()
 export class AuthService {
@@ -56,6 +57,11 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    const isPasswordValid = await verify(user.password, dto.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('User not found');
+    }
+
     return user;
   }
 
