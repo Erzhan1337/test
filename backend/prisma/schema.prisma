@@ -11,6 +11,12 @@ model User{
   id String @id @default(cuid())
   email String @unique
   password String
+
+  tasks Todo[]
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("users")
 }
 
 model Todo {
@@ -18,6 +24,13 @@ model Todo {
   title String
   description String?
   status TODO_STATUS @default(TODO)
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  @@map("todos")
 }
 
 enum TODO_STATUS {
